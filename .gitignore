@@ -1,0 +1,12 @@
+# Keep Excel private - NEVER push to GitHub
+*.xlsx
+*.xls
+*.csv
+
+# Node.js
+node_modules/
+
+# Generator script (admin only)
+generate.js
+package.json
+package-lock.json

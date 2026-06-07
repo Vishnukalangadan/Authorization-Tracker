@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="KWA Operator Authorization System — View all authorized operators">
+  <title>KWA Operator Authorizations</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg-primary: #0a0e1a;
+      --bg-card: rgba(17, 24, 39, 0.7);
+      --bg-glass: rgba(255, 255, 255, 0.03);
+      --border-subtle: rgba(255, 255, 255, 0.06);
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --gradient-main: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #06b6d4 100%);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      padding: 40px 20px;
+      position: relative;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: #6366f1;
+      top: -300px; right: -200px;
+      filter: blur(120px);
+      opacity: 0.1;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 640px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .page-header h1 {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: var(--gradient-main);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+    }
+    .page-header p {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    /* Search */
+    .search-box {
+      position: relative;
+      margin-bottom: 24px;
+    }
+    .search-box input {
+      width: 100%;
+      padding: 14px 20px 14px 48px;
+      border-radius: 14px;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-card);
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .search-box input:focus {
+      border-color: rgba(99,102,241,0.4);
+    }
+    .search-box input::placeholder { color: var(--text-muted); }
+    .search-box svg {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18px; height: 18px;
+      color: var(--text-muted);
+    }
+
+    /* User rows */
+    .user-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 20px;
+      border-radius: 14px;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-glass);
+      margin-bottom: 8px;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.25s ease;
+      cursor: pointer;
+    }
+    .user-row:hover {
+      background: rgba(99,102,241,0.06);
+      border-color: rgba(99,102,241,0.2);
+      transform: translateX(4px);
+    }
+
+    .row-avatar {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      background: var(--gradient-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 700;
+      color: white;
+      flex-shrink: 0;
+    }
+    .row-info { flex: 1; min-width: 0; }
+    .row-name { font-weight: 600; font-size: 15px; }
+    .row-meta { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+    .row-badges { display: flex; gap: 6px; flex-wrap: wrap; }
+    .mini-badge {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      padding: 3px 8px;
+      border-radius: 100px;
+    }
+    .mini-badge.active { color: #34d399; background: rgba(52,211,153,0.1); }
+    .mini-badge.warning { color: #fbbf24; background: rgba(251,191,36,0.1); }
+    .mini-badge.expired { color: #f87171; background: rgba(248,113,113,0.1); }
+
+    .row-arrow {
+      width: 18px; height: 18px;
+      color: var(--text-muted);
+      flex-shrink: 0;
+      transition: transform 0.2s;
+    }
+    .user-row:hover .row-arrow {
+      transform: translateX(3px);
+      color: var(--text-secondary);
+    }
+
+    .print-link {
+      display: block;
+      text-align: center;
+      margin-top: 24px;
+      color: var(--text-muted);
+      font-size: 13px;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .print-link:hover { color: var(--text-secondary); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="page-header">
+      <h1>🔐 KWA Operator Authorizations</h1>
+      <p>Scan QR codes to view operator authorization status</p>
+    </div>
+
+    <div class="search-box">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+      <input type="text" id="search-input" placeholder="Search by name, ID, or department..." oninput="filterUsers(this.value)">
+    </div>
+
+    <div id="user-list">
+      
+        <a href="users/hmlk298.html" class="user-row" id="user-hmlk298">
+          <div class="row-avatar">V</div>
+          <div class="row-info">
+            <div class="row-name">Vishnu</div>
+            <div class="row-meta">HMLK298 · Maintanance</div>
+          </div>
+          <div class="row-badges">
+            <span class="mini-badge active">4 Active</span>
+            
+            
+          </div>
+          <svg class="row-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </a>
+
+        <a href="users/himlk297.html" class="user-row" id="user-himlk297">
+          <div class="row-avatar">V</div>
+          <div class="row-info">
+            <div class="row-name">vijithra</div>
+            <div class="row-meta">HIMLK297 · safty</div>
+          </div>
+          <div class="row-badges">
+            <span class="mini-badge active">4 Active</span>
+            
+            
+          </div>
+          <svg class="row-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </a>
+    </div>
+
+    <a href="print-sheet.html" class="print-link">🖨️ Open printable QR code sheet</a>
+  </div>
+
+  <script>
+    function filterUsers(query) {
+      const q = query.toLowerCase();
+      document.querySelectorAll('.user-row').forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(q) ? 'flex' : 'none';
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Authorization profile for vijithra - safty">
+  <title>vijithra — Authorizations</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg-primary: #0a0e1a;
+      --bg-secondary: #111827;
+      --bg-card: rgba(17, 24, 39, 0.7);
+      --bg-glass: rgba(255, 255, 255, 0.03);
+      --border-subtle: rgba(255, 255, 255, 0.06);
+      --border-glow: rgba(99, 102, 241, 0.3);
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --accent-indigo: #818cf8;
+      --accent-violet: #a78bfa;
+      --accent-cyan: #22d3ee;
+      --active-green: #34d399;
+      --warning-amber: #fbbf24;
+      --expired-red: #f87171;
+      --gradient-main: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #06b6d4 100%);
+      --gradient-card: linear-gradient(135deg, rgba(99,102,241,0.08) 0%, rgba(139,92,246,0.05) 100%);
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Animated background orbs */
+    body::before, body::after {
+      content: '';
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.15;
+      z-index: 0;
+      animation: float 20s ease-in-out infinite;
+    }
+    body::before {
+      width: 600px; height: 600px;
+      background: #6366f1;
+      top: -200px; right: -200px;
+    }
+    body::after {
+      width: 500px; height: 500px;
+      background: #06b6d4;
+      bottom: -150px; left: -150px;
+      animation-delay: -10s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      25% { transform: translate(30px, -40px) scale(1.05); }
+      50% { transform: translate(-20px, 20px) scale(0.95); }
+      75% { transform: translate(40px, 30px) scale(1.02); }
+    }
+
+    .profile-container {
+      width: 100%;
+      max-width: 480px;
+      position: relative;
+      z-index: 1;
+      animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Header Card */
+    .header-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(40px);
+      -webkit-backdrop-filter: blur(40px);
+      border: 1px solid var(--border-subtle);
+      border-radius: 24px;
+      padding: 40px 32px 32px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .header-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: var(--gradient-main);
+    }
+
+    .avatar {
+      width: 88px; height: 88px;
+      border-radius: 50%;
+      background: var(--gradient-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: white;
+      box-shadow: 0 0 0 4px var(--bg-primary), 0 0 0 6px rgba(99,102,241,0.3);
+      position: relative;
+    }
+    .avatar::after {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      background: var(--gradient-main);
+      z-index: -1;
+      opacity: 0.4;
+      filter: blur(12px);
+    }
+
+    .user-name {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 6px;
+      background: linear-gradient(135deg, #f1f5f9 0%, #cbd5e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .user-meta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 12px;
+    }
+    .meta-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 500;
+      background: var(--bg-glass);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+    }
+    .meta-chip svg {
+      width: 14px; height: 14px;
+      opacity: 0.7;
+    }
+
+    /* Authorizations Section */
+    .section-title {
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+      margin: 28px 0 16px;
+      padding-left: 4px;
+    }
+
+    .auth-card {
+      background: var(--gradient-card);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 12px;
+      transition: all 0.3s ease;
+      animation: fadeIn 0.5s ease both;
+    }
+    .auth-card:nth-child(1) { animation-delay: 0.1s; }
+    .auth-card:nth-child(2) { animation-delay: 0.2s; }
+    .auth-card:nth-child(3) { animation-delay: 0.3s; }
+    .auth-card:nth-child(4) { animation-delay: 0.4s; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .auth-card:hover {
+      border-color: var(--border-glow);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(99, 102, 241, 0.08);
+    }
+
+    .auth-card.status-active { border-left: 3px solid var(--active-green); }
+    .auth-card.status-warning { border-left: 3px solid var(--warning-amber); }
+    .auth-card.status-expired { border-left: 3px solid var(--expired-red); }
+
+    .auth-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .auth-name {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .auth-badge {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 4px 10px;
+      border-radius: 100px;
+    }
+    .auth-badge.status-active {
+      color: var(--active-green);
+      background: rgba(52, 211, 153, 0.1);
+      border: 1px solid rgba(52, 211, 153, 0.2);
+    }
+    .auth-badge.status-warning {
+      color: var(--warning-amber);
+      background: rgba(251, 191, 36, 0.1);
+      border: 1px solid rgba(251, 191, 36, 0.2);
+    }
+    .auth-badge.status-expired {
+      color: var(--expired-red);
+      background: rgba(248, 113, 113, 0.1);
+      border: 1px solid rgba(248, 113, 113, 0.2);
+    }
+    .auth-badge.status-unknown {
+      color: var(--text-muted);
+      background: rgba(100, 116, 139, 0.1);
+      border: 1px solid rgba(100, 116, 139, 0.2);
+    }
+
+    .auth-dates {
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+    .date-group {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .date-separator {
+      width: 1px;
+      height: 32px;
+      background: var(--border-subtle);
+      margin: 0 16px;
+    }
+    .date-label {
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
+    }
+    .date-value {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      margin-top: 24px;
+      padding: 16px;
+      font-size: 12px;
+      color: var(--text-muted);
+      opacity: 0.6;
+    }
+    .footer span {
+      background: var(--gradient-main);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 600;
+    }
+
+    /* Responsive */
+    @media (max-width: 520px) {
+      .profile-container { max-width: 100%; }
+      .header-card { padding: 32px 20px 24px; border-radius: 20px; }
+      .user-name { font-size: 22px; }
+      .user-meta { flex-direction: column; gap: 8px; }
+      .auth-card { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="profile-container">
+    <div class="header-card">
+      <div class="avatar">V</div>
+      <h1 class="user-name">vijithra</h1>
+      <div class="user-meta">
+        <span class="meta-chip">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+          safty
+        </span>
+        <span class="meta-chip">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"/></svg>
+          HIMLK297
+        </span>
+      </div>
+    </div>
+
+    <div class="section-title">Authorizations</div>
+    
+        <div class="auth-card status-active">
+          <div class="auth-header">
+            <span class="auth-name">Height work</span>
+            <span class="auth-badge status-active">Active</span>
+          </div>
+          <div class="auth-dates">
+            <div class="date-group">
+              <span class="date-label">Issued</span>
+              <span class="date-value">6/7/26</span>
+            </div>
+            <div class="date-separator"></div>
+            <div class="date-group">
+              <span class="date-label">Expires</span>
+              <span class="date-value">10/7/26</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="auth-card status-active">
+          <div class="auth-header">
+            <span class="auth-name">EOT Operations</span>
+            <span class="auth-badge status-active">Active</span>
+          </div>
+          <div class="auth-dates">
+            <div class="date-group">
+              <span class="date-label">Issued</span>
+              <span class="date-value">6/7/26</span>
+            </div>
+            <div class="date-separator"></div>
+            <div class="date-group">
+              <span class="date-label">Expires</span>
+              <span class="date-value">10/7/26</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="auth-card status-active">
+          <div class="auth-header">
+            <span class="auth-name">Forklift operator</span>
+            <span class="auth-badge status-active">Active</span>
+          </div>
+          <div class="auth-dates">
+            <div class="date-group">
+              <span class="date-label">Issued</span>
+              <span class="date-value">6/7/26</span>
+            </div>
+            <div class="date-separator"></div>
+            <div class="date-group">
+              <span class="date-label">Expires</span>
+              <span class="date-value">10/7/26</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="auth-card status-active">
+          <div class="auth-header">
+            <span class="auth-name">Fire watcher</span>
+            <span class="auth-badge status-active">Active</span>
+          </div>
+          <div class="auth-dates">
+            <div class="date-group">
+              <span class="date-label">Issued</span>
+              <span class="date-value">6/7/26</span>
+            </div>
+            <div class="date-separator"></div>
+            <div class="date-group">
+              <span class="date-label">Expires</span>
+              <span class="date-value">10/7/26</span>
+            </div>
+          </div>
+        </div>
+
+    <div class="footer">
+      Verified by <span>KWA Operator System</span>
+    </div>
+  </div>
+</body>
+</html>

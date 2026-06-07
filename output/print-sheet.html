@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Codes — Print Sheet</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #fff;
+      color: #1a1a2e;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 8px;
+      color: #1a1a2e;
+    }
+    .subtitle {
+      text-align: center;
+      color: #666;
+      font-size: 13px;
+      margin-bottom: 30px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 24px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .print-card {
+      border: 2px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 20px;
+      text-align: center;
+      page-break-inside: avoid;
+      transition: box-shadow 0.2s;
+    }
+    .print-card:hover {
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    .print-qr img {
+      width: 160px;
+      height: 160px;
+      margin-bottom: 12px;
+    }
+    .print-name {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .print-meta {
+      font-size: 12px;
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    @media print {
+      body { padding: 10px; }
+      .grid { gap: 16px; }
+      .print-card { border-width: 1px; }
+      .print-card:hover { box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+  <h1>🔐 Authorization QR Codes</h1>
+  <p class="subtitle">Print this sheet and distribute QR codes to each operator</p>
+  <div class="grid">
+    
+      <div class="print-card">
+        <div class="print-qr">
+          <img src="../qrcodes/hmlk298.png" alt="QR Code for Vishnu">
+        </div>
+        <div class="print-info">
+          <div class="print-name">Vishnu</div>
+          <div class="print-meta">HMLK298 · Maintanance</div>
+        </div>
+      </div>
+
+      <div class="print-card">
+        <div class="print-qr">
+          <img src="../qrcodes/himlk297.png" alt="QR Code for vijithra">
+        </div>
+        <div class="print-info">
+          <div class="print-name">vijithra</div>
+          <div class="print-meta">HIMLK297 · safty</div>
+        </div>
+      </div>
+  </div>
+</body>
+</html>
